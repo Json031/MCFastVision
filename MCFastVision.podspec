@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "MCFastVision"
-  spec.version      = "1.0.2"
+  spec.version      = "1.0.3"
   spec.summary      = "A lightweight iOS Vision toolkit for OCR, barcode/QR scanning, face detection, and rectangle detection."
 
   # This description is used to generate tags and improve search results.
@@ -96,7 +96,7 @@ Pod::Spec.new do |spec|
   spec.exclude_files = "Classes/Exclude"
   
   spec.subspec 'Core' do |ss|
-    ss.source_files = 'Classes/MCFastVision.swift'
+    ss.source_files = 'Classes/Core/MCFastVision.swift'
     ss.dependency 'MCFastVision/Tool'
     ss.dependency 'MCFastVision/Extension'
     ss.dependency 'MCFastVision/Model'
@@ -105,16 +105,15 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'Config' do |ss|
     ss.source_files = 'Classes/Config/**/*.{h,m,swift}'
-    ss.dependency 'MCFastVision/Model'
   end
 
   spec.subspec 'Model' do |ss|
     ss.source_files = 'Classes/Model/**/*.{h,m,swift}'
+    ss.dependency 'MCFastVision/Config'
   end
   
   spec.subspec 'Tool' do |ss|
     ss.source_files = 'Classes/Tool/**/*.{h,m,swift}'
-    ss.dependency 'MCFastVision/Config'
   end
   
   spec.subspec 'Extension' do |ss|
