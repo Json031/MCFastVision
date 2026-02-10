@@ -1,5 +1,14 @@
 # MCFastVision
 
+<a name="top"></a>
+
+[![CocoaPods](https://img.shields.io/cocoapods/v/MCFastVision.svg)](https://cocoapods.org/pods/MCFastVision)
+![Swift 5](https://img.shields.io/badge/Swift-5.0-orange.svg)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/Json031/MCFastVision/blob/main/LICENSE)
+
+---
+
+## 🌍 Language / 语言选择
 <!-- 语言切换（点击会滚动到对应语言区） -->
 [中文](#中文) | [English](#english)
 
