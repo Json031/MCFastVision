@@ -18,7 +18,7 @@ MCFastVision 是一个基于 iOS Vision 框架的轻量级通用视觉识别工�
 
 ## 项目Example示例
 ### 人脸及关键点识别
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/3187429a-51f1-4b4c-9bf1-5fa861f06e11" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/03a06605-5da4-4d10-8156-283110a4f821" style="border: 2px solid blue;" />
 
 ### 动物检测
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f1035020-62d6-43d4-b209-c417c9a0b00d" style="border: 2px solid blue;" />
@@ -26,15 +26,15 @@ MCFastVision 是一个基于 iOS Vision 框架的轻量级通用视觉识别工�
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2844abae-3bce-49bc-83b8-28ecd0bd6a8a" style="border: 2px solid blue;" />
 
 ### 二维码识别 / 条形码识别
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2e79c2b9-094b-4332-8584-24c60b661ca8" style="border: 2px solid blue;" />
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f0eb645f-a610-42e8-9895-f7d78aae4ac3" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/3ccf13ba-e638-4cd2-93a8-556472c58eba" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/765722f4-9624-46a9-a593-404b01bf3e95" style="border: 2px solid blue;" />
 
 ### 矩形检测
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/47d850fe-8260-4ca6-8f30-719d29356351" style="border: 2px solid blue;" />
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/bb11264c-7179-4360-9d3b-10a12e5f4249" style="border: 2px solid blue;" />
 
 ### 文本识别
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/ad4272c3-27a3-46a0-92a2-bc7c27b05389" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/58fa173e-dd94-4db1-a41e-4daefa61a61a" style="border: 2px solid blue;" />
 
 ### 人脸框快速检测
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/81579d8f-d6c9-4696-9628-2a1dc9fc8202" style="border: 2px solid blue;" />
@@ -63,7 +63,7 @@ MCFastVision is a lightweight, general-purpose visual recognition toolkit based 
 
 ## Project Example
 ### Face landmarks recognition
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/3187429a-51f1-4b4c-9bf1-5fa861f06e11" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/03a06605-5da4-4d10-8156-283110a4f821" style="border: 2px solid blue;" />
 
 ### Animal recognition
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f1035020-62d6-43d4-b209-c417c9a0b00d" style="border: 2px solid blue;" />
@@ -71,15 +71,15 @@ MCFastVision is a lightweight, general-purpose visual recognition toolkit based 
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2844abae-3bce-49bc-83b8-28ecd0bd6a8a" style="border: 2px solid blue;" />
 
 ### QR code recognition / Barcode recognition
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2e79c2b9-094b-4332-8584-24c60b661ca8" style="border: 2px solid blue;" />
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f0eb645f-a610-42e8-9895-f7d78aae4ac3" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/3ccf13ba-e638-4cd2-93a8-556472c58eba" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/765722f4-9624-46a9-a593-404b01bf3e95" style="border: 2px solid blue;" />
 
 ### Rectangle detection
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/47d850fe-8260-4ca6-8f30-719d29356351" style="border: 2px solid blue;" />
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/bb11264c-7179-4360-9d3b-10a12e5f4249" style="border: 2px solid blue;" />
 
 ### Text recognition
-<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/ad4272c3-27a3-46a0-92a2-bc7c27b05389" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/58fa173e-dd94-4db1-a41e-4daefa61a61a" style="border: 2px solid blue;" />
 
 ### Fast detection of face rectangles
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/81579d8f-d6c9-4696-9628-2a1dc9fc8202" style="border: 2px solid blue;" />
