@@ -12,4 +12,5 @@ public enum MCFastVisionDetectType {
     case rectangle      //矩形检测器在图像中查找表示真实世界矩形形状的区域
     case faceRectangles //人脸框
     case faceLandmarks  //检测图像中的所有面部，然后再分析面部特征
+    case animals  //检测动物
 }

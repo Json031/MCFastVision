@@ -85,6 +85,8 @@ extension MCFastVision {
             baseRequest = VNDetectRectanglesRequest(completionHandler: completionHandle)
         case .faceRectangles:
             baseRequest = VNDetectFaceRectanglesRequest(completionHandler: completionHandle)
+        case .animals:
+            baseRequest = VNRecognizeAnimalsRequest(completionHandler: completionHandle)
         }
         
         //6. 在global线程发送请求，防止阻塞主线程
@@ -847,6 +849,87 @@ extension MCFastVision {
     }
 }
 
+//MARK: 动物检测
+
+extension MCFastVision {
+    
+    public class func detectAnimals(
+        imageView: UIImageView,
+        successBlock: ((_ results: [MCVisionAnimalResult]) -> Void)? = nil,
+        failedBlock: ((_ err: String) -> Void)? = nil
+    ) {
+
+        guard let image: UIImage = imageView.image else {
+            failedBlock?("未获取到待识别的图片")
+            return
+        }
+
+        guard let cgImage: CGImage = image.cgImage else {
+            failedBlock?("未获取到待识别的图片")
+            return
+        }
+
+        // ⚠️ Vision 需要方向，否则坐标会错位
+        let orientation = CGImagePropertyOrientation(rawValue: UInt32(image.imageOrientation.rawValue)) ?? .up
+
+        let request = VNRecognizeAnimalsRequest { request, error in
+
+            if let error = error {
+                failedBlock?("矩形检测失败：\(error.localizedDescription)")
+                return
+            }
+
+            guard let observations = request.results as? [VNRecognizedObjectObservation] else {
+                failedBlock?("检测失败，请求结果异常")
+                return
+            }
+
+            var results: [MCVisionAnimalResult] = []
+
+            for obs: VNRecognizedObjectObservation in observations {
+                //置信度过滤
+                if obs.confidence < Float(MCFastVision.shared.mcVisionDetectConfig.minConfidence) {
+                    continue
+                }
+                guard let label = obs.labels.first else { continue }
+                // obs.boundingBox 是 normalized（左下角原点）
+                let rectInImage = MCVisionCoordinateConverter.convertRect(obs.boundingBox, image)
+                guard let animalType: MCVisionAnimalType = MCVisionAnimalType(rawValue: label.identifier) else { continue }
+                results.append(
+                    MCVisionAnimalResult(
+                        observation: obs,
+                        animalType: animalType,
+                        confidence: label.confidence,
+                        boundingBox: obs.boundingBox,
+                        rect: rectInImage
+                    )
+                )
+            }
+
+            DispatchQueue.main.async {
+                let config = MCFastVision.shared.mcVisionDetectConfig.drawConfig
+                if config.showConfidence {
+                    DispatchQueue.main.async {
+                        MCFastVision.drawVisionRecognitionAnimalResult(imageView: imageView, results: results)
+                    }
+                }
+                successBlock?(results)
+            }
+        }
+        
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
+
+
+        DispatchQueue.global().async {
+            do {
+                try handler.perform([request])
+            } catch {
+                failedBlock?("动物检测失败：\(error.localizedDescription)")
+            }
+        }
+    }
+}
+
 //MARK: 绘制关键点、置信度和目标方框
 extension MCFastVision {
     /// 绘制脸部关键点
@@ -1128,6 +1211,16 @@ extension MCFastVision {
         drawBoxAndConfInImageView(imageView: imageView, boxLineOverlayLayer: boxLineOverlayLayer, conf: conf, boundingBox: boundingBox)
     }
     
+    class func drawVisionRecognitionAnimalResult(imageView: UIImageView, results: [MCVisionAnimalResult]) {
+        let boxLineOverlayLayer: CALayer = newBoxLineOverlayLayer(imageView: imageView)
+        for visionResult: MCVisionAnimalResult in results {
+            // 0) 画框 + 动物类别 + 置信度
+            let conf: CGFloat = CGFloat(visionResult.confidence)
+            let boundingBox: CGRect = visionResult.rect
+            drawBoxAndConfInImageView(imageView: imageView, boxLineOverlayLayer: boxLineOverlayLayer, label: visionResult.label + " (\(String(format: "%.2f", conf)))", boundingBox: boundingBox)
+        }
+    }
+    
     // MARK: - Draw box and confidence
     /// 创建人脸/条码/文字等检测框的承载 Layer：为 UIImageView 生成独立的绘制层（用于承载各类视觉检测结果的框体/标记）
     /// 功能说明：根据 UIImageView 的尺寸、contentMode 自动创建适配的 CALayer，
@@ -1162,6 +1255,9 @@ extension MCFastVision {
     ///   - conf: 检测结果置信度（取值范围 0.0-1.0，会自动格式化显示）
     ///   - boundingBox: 检测框的边界矩形（UI 坐标系，需与 imageView 图片尺寸匹配）
     class func drawBoxAndConfInImageView(imageView: UIImageView, boxLineOverlayLayer: CALayer, conf: CGFloat, boundingBox: CGRect) {
+        drawBoxAndConfInImageView(imageView: imageView, boxLineOverlayLayer: boxLineOverlayLayer, label: String(format: "%.2f", conf), boundingBox: boundingBox)
+    }
+    class func drawBoxAndConfInImageView(imageView: UIImageView, boxLineOverlayLayer: CALayer, label: String, boundingBox: CGRect) {
         guard let imageSize: CGSize = imageView.image?.size else {
             return
         }
@@ -1184,11 +1280,10 @@ extension MCFastVision {
         boxLineOverlayLayer.addSublayer(boxLayer)
         
         if config.showConfidence {
-            let confStr: String = String(format: "%.2f", conf)
             
             // 先算文字尺寸（简单估算）
             let font: UIFont = UIFont.systemFont(ofSize: config.confidenceFontSize, weight: .medium)
-            let textSize = (confStr as NSString).size(withAttributes: [.font: font])
+            let textSize = (label as NSString).size(withAttributes: [.font: font])
 
             let w = textSize.width + config.confidencePadding.left + config.confidencePadding.right
             let h = textSize.height + config.confidencePadding.top + config.confidencePadding.bottom
@@ -1206,7 +1301,7 @@ extension MCFastVision {
 
             // 置信度文字（右上角）
             let textLayer: CATextLayer = CATextLayer()
-            textLayer.string = String(format: "%.2f", conf)
+            textLayer.string = label
             textLayer.fontSize = config.confidenceFontSize
             textLayer.alignmentMode = config.alignmentMode
             textLayer.foregroundColor = config.confidenceTextColor.cgColor

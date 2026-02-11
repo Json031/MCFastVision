@@ -16,8 +16,8 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "MCFastVision"
-  spec.version      = "1.0.3"
-  spec.summary      = "A lightweight iOS Vision toolkit for OCR, barcode/QR scanning, face detection, and rectangle detection."
+  spec.version      = "1.1.0"
+  spec.summary      = "A lightweight iOS Vision toolkit for OCR, barcode/QR scanning, face detection, rectangle detection, and animal detection (cats and dogs)."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
