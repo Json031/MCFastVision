@@ -1,7 +1,9 @@
 <div align="center">
+  <a href="https://github.com/Json031/MCFastVision" target="_blank">
   <img width="660" height="255" alt="screenshot-1"
        src="https://github.com/user-attachments/assets/c25bd23a-d4a0-433d-978a-08232d5ea7f2"
        style="border: 2px solid blue;" />
+    </a>
 </div>
 
 # MCFastVision
