@@ -20,6 +20,11 @@
 ### 人脸及关键点识别
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/3187429a-51f1-4b4c-9bf1-5fa861f06e11" style="border: 2px solid blue;" />
 
+### 动物检测
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f1035020-62d6-43d4-b209-c417c9a0b00d" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/8628bf59-cd4d-4961-aa0c-a7c3b6dec8ea" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2844abae-3bce-49bc-83b8-28ecd0bd6a8a" style="border: 2px solid blue;" />
+
 ### 二维码识别 / 条形码识别
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2e79c2b9-094b-4332-8584-24c60b661ca8" style="border: 2px solid blue;" />
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f0eb645f-a610-42e8-9895-f7d78aae4ac3" style="border: 2px solid blue;" />
@@ -59,6 +64,11 @@ MCFastVision is a general vision recognition toolkit built on iOS Vision framewo
 ## Project Example
 ### Face landmarks recognition
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/3187429a-51f1-4b4c-9bf1-5fa861f06e11" style="border: 2px solid blue;" />
+
+### Animal recognition
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/f1035020-62d6-43d4-b209-c417c9a0b00d" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/8628bf59-cd4d-4961-aa0c-a7c3b6dec8ea" style="border: 2px solid blue;" />
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2844abae-3bce-49bc-83b8-28ecd0bd6a8a" style="border: 2px solid blue;" />
 
 ### QR code recognition / Barcode recognition
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/2e79c2b9-094b-4332-8584-24c60b661ca8" style="border: 2px solid blue;" />
