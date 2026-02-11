@@ -7,7 +7,7 @@ import UIKit
 import PhotosUI
 import MCFastVision
 
-class VisionViewController: UIViewController {
+class MCVisionViewController: UIViewController {
     private var imageView: UIImageView = UIImageView()
     private var tipTextView: UITextView = UITextView()
     private var activityIndicatorView: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
@@ -128,16 +128,45 @@ class VisionViewController: UIViewController {
         DispatchQueue.main.async(execute: {
             self.activityIndicatorView.startAnimating()
             MCFastVision.visionDetectFaceLandmarks(imageView: self.imageView, successBlock: { results in
-                DispatchQueue.main.async(execute: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         self.activityIndicatorView.stopAnimating()
-                        if results.count <= 0 {
+                        
+                        if results.isEmpty {
                             self.tipTextView.text = "无人脸检测结果"
                             return
                         }
-                        self.tipTextView.text = "人脸识别成功，共\(results.count)个人脸"
-                    })
-                })
+                        
+                        var text = "人脸检测成功\n共检测到 \(results.count) 张人脸\n\n"
+                        
+                        for (index, result) in results.enumerated() {
+                            // 置信度格式化
+                            let confStr = String(format: "%.3f", result.confidence)
+                            
+                            text += "第 \(index + 1) 张人脸\n"
+                            text += "  置信度: \(confStr)\n"
+                            
+                            // 简单提示关键点是否完整
+                            let hasLandmarks = !result.faceContour.isEmpty && !result.outerLips.isEmpty
+                            text += "  关键点: \(hasLandmarks ? "已提取完整" : "部分缺失")\n"
+                            
+                            // 显示人脸框位置
+                            let rectStr = "x:\(String(format: "%.0f", result.rect.origin.x)), y:\(String(format: "%.0f", result.rect.origin.y)), w:\(String(format: "%.0f", result.rect.width)), h:\(String(format: "%.0f", result.rect.height))"
+                            text += "  位置: \(rectStr)\n"
+                            
+                            text += "\n"
+                        }
+                        
+                        // 有多张脸，总结
+                        if results.count > 1 {
+                            text += "已为所有 \(results.count) 张人脸提取关键点（眼、眉、鼻、嘴、轮廓等）"
+                        } else {
+                            text += "已提取详细人脸关键点（可用于美颜、表情分析等）"
+                        }
+                        
+                        self.tipTextView.text = text
+                    }
+                }
             }, failedBlock: { err in
                 DispatchQueue.main.async(execute: {
                     self.activityIndicatorView.stopAnimating()
@@ -157,11 +186,30 @@ class VisionViewController: UIViewController {
                 successBlock: { results in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                         self.activityIndicatorView.stopAnimating()
+                        
                         if results.count <= 0 {
-                            self.tipTextView.text = "无文本检测结果"
+                            self.tipTextView.text = "无文本识别结果"
                             return
                         }
-                        self.tipTextView.text = "文本识别成功，共\(results.count)处文本"
+                        
+                        var displayText = "文本识别成功\n共检测到 \(results.count) 处文本\n\n"
+                        
+                        for (index, result) in results.enumerated() {
+                            // 为了让文本更清晰，对内容做简单清理（去除多余换行/空格）
+                            let cleanedText = result.text.trimmingCharacters(in: .whitespacesAndNewlines)
+                                .replacingOccurrences(of: "\n", with: " ")  // 把换行转为空格
+                            
+                            displayText += "第 \(index + 1) 处文本:\n"
+                            displayText += "  内容: \(cleanedText)\n"
+                            displayText += "  置信度: \(String(format: "%.2f", result.confidence))\n"
+                            
+                            // 显示位置信息
+                            displayText += "  位置: x=\(String(format: "%.0f", result.rect.origin.x)), y=\(String(format: "%.0f", result.rect.origin.y)), w=\(String(format: "%.0f", result.rect.width)), h=\(String(format: "%.0f", result.rect.height))\n"
+                            
+                            displayText += "\n"  // 每段文本之间空一行
+                        }
+                        
+                        self.tipTextView.text = displayText
                     })
                 },
                 failedBlock: {err in
@@ -186,10 +234,22 @@ class VisionViewController: UIViewController {
                             self.tipTextView.text = "无条码检测结果"
                             return
                         }
-                        self.tipTextView.text = "条码识别成功"
-                        for result: MCVisionBarcodeResult in results {
-                            PLog("\(result.type == .barcode1D ? "条形码" : "二维码")内容: \(result.payload)")
+                        self.tipTextView.text = ""  // 先清空，避免旧内容残留
+                        
+                        var text = "条码识别成功，共 \(results.count) 个条码\n\n"
+                        
+                        for (index, result) in results.enumerated() {
+                            let barcodeTypeText = result.type == .barcode1D ? "条形码" : "二维码"
+                            let typeName = result.symbology  // 如 QR、EAN13、Code128 等
+                            
+                            text += "第 \(index + 1) 个 \(barcodeTypeText)\n"
+                            text += "  类型: \(typeName)\n"
+                            text += "  内容: \(result.payload)\n"
+                            text += "  置信度: \(String(format: "%.2f", result.confidence))\n"
+                            text += "\n"  // 条码之间空一行
                         }
+                        
+                        self.tipTextView.text = text
                     })
                 },
                 failedBlock: {err in
@@ -275,15 +335,38 @@ class VisionViewController: UIViewController {
             MCFastVision.visionDetectRectangles(
                 imageView: self.imageView,
                 successBlock: { results in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                        guard let self else { return }
                         
                         self.activityIndicatorView.stopAnimating()
-                        if results.count <= 0 {
+                        
+                        if results.isEmpty {
                             self.tipTextView.text = "无矩形检测结果"
                             return
                         }
-                        self.tipTextView.text = "矩形识别成功，共检测到\(results.count)个矩形"
-                    })
+                        
+                        var text = "矩形检测成功\n共检测到 \(results.count) 个矩形\n\n"
+                        
+                        for (index, result) in results.enumerated() {
+                            let conf = String(format: "%.3f", result.confidence)
+                            
+                            text += "第 \(index + 1) 个矩形\n"
+                            text += "  置信度: \(conf)\n"
+                            
+                            // 显示大致位置或尺寸
+                            let w = String(format: "%.0f", result.rect.width)
+                            let h = String(format: "%.0f", result.rect.height)
+                            text += "  大小: \(w) × \(h)\n"
+                            
+                            // 显示四个角点坐标
+                            text += "  角点: TL(\(Int(result.topLeft.x)),\(Int(result.topLeft.y))) TR(\(Int(result.topRight.x)),\(Int(result.topRight.y)))\n"
+                            text += "         BL(\(Int(result.bottomLeft.x)),\(Int(result.bottomLeft.y))) BR(\(Int(result.bottomRight.x)),\(Int(result.bottomRight.y)))\n"
+                            
+                            text += "\n"
+                        }
+                        
+                        self.tipTextView.text = text
+                    }
                 },
                 failedBlock: {err in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -308,7 +391,7 @@ class VisionViewController: UIViewController {
 }
 
 // MARK: - AVCaptureMetadataOutputObjectsDelegate
-extension VisionViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate, PHPickerViewControllerDelegate {
+extension MCVisionViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate, PHPickerViewControllerDelegate {
     @available(iOS 14, *)
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.navigationController?.dismiss(animated: true, completion: nil)
@@ -352,7 +435,7 @@ extension VisionViewController: UINavigationControllerDelegate, UIImagePickerCon
     
 }
 
-extension VisionViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MCVisionViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.types.count
     }
