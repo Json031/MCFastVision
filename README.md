@@ -14,7 +14,7 @@
 
 # 中文
 
-一个基于 iOS Vision 框架的通用视觉识别工具库，封装了文字识别（OCR）、条形码/二维码识别、人脸检测、人脸关键点检测、矩形检测等能力，并提供统一的配置入口与识别结果绘制能力，支持快速集成到业务项目中，用于扫描、识别、检测与可视化标注等场景。
+MCFastVision 是一个基于 iOS Vision 框架的轻量级通用视觉识别工具库，封装了文字识别（OCR）、条形码/二维码识别、人脸检测、人脸关键点检测、矩形检测、动物识别（猫与狗）等能力，并提供统一的配置入口与识别结果绘制能力，支持快速集成到业务项目中，用于扫描、识别、检测与可视化标注等场景。
 
 ## 项目Example示例
 ### 人脸及关键点识别
@@ -59,7 +59,7 @@ pod install
 
 # English
 
-MCFastVision is a general vision recognition toolkit built on iOS Vision framework. It wraps OCR, barcode/QR detection, face detection, face landmark detection, rectangle detection, and provides unified configuration and result drawing utilities for quick integration into apps for scanning, recognition and annotation.
+MCFastVision is a lightweight, general-purpose visual recognition toolkit based on Apple's iOS Vision framework. It encapsulates capabilities such as text recognition (OCR), barcode/QR code scanning, face detection, face landmark detection, rectangle detection, and animal recognition (cats and dogs). The library provides a unified configuration entry point and built-in drawing support for recognition results, enabling rapid integration into business projects for scenarios like scanning, identification, detection, and visual annotation.
 
 ## Project Example
 ### Face landmarks recognition
