@@ -16,8 +16,8 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "MCFastVision"
-  spec.version      = "1.1.0"
-  spec.summary      = "A lightweight iOS Vision toolkit for OCR, barcode/QR scanning, face detection, rectangle detection, and animal detection (cats and dogs)."
+  spec.version      = "1.2.0"
+  spec.summary      = "A lightweight and versatile visual recognition toolkit based on the iOS Vision framework encapsulates capabilities such as text recognition (OCR), barcode/QR code recognition, face detection, facial keypoint detection, rectangle detection, animal recognition (cats and dogs), and portrait segmentation (person mask generation). It provides a unified configuration entry and recognition result drawing capability (supporting visualizations such as box selection, keypoint, and mask overlay), enabling rapid integration into business projects for scenarios such as scanning, recognition, detection, background blurring, image clipping, and visual annotation."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-一个基于 iOS Vision 框架的通用视觉识别工具库，封装了文字识别（OCR）、条形码/二维码识别、人脸检测、人脸关键点检测、矩形检测等能力，并提供统一的配置入口与识别结果绘制能力，支持快速集成到业务项目中，用于扫描、识别、检测与可视化标注等场景。
+  一个基于 iOS Vision 框架的轻量级通用视觉识别工具库，封装了文字识别（OCR）、条形码/二维码识别、人脸检测、人脸关键点检测、矩形检测、动物识别（猫与狗）、人像分割（人物蒙版生成）等能力，并提供统一的配置入口与识别结果绘制能力（支持框选、关键点、蒙版叠加等可视化），支持快速集成到业务项目中，用于扫描、识别、检测、背景虚化、抠图与可视化标注等场景。
                    DESC
 
   spec.homepage     = "https://github.com/Json031/MCFastVision"

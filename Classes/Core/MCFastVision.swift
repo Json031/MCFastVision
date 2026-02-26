@@ -8,6 +8,7 @@
 
 import UIKit
 import Vision
+import AVFoundation
 
 /// 全局图层名称常量
 let boxLineOverlayLayerName: String = "BoxLineOverlayLayer"
@@ -87,6 +88,12 @@ extension MCFastVision {
             baseRequest = VNDetectFaceRectanglesRequest(completionHandler: completionHandle)
         case .animals:
             baseRequest = VNRecognizeAnimalsRequest(completionHandler: completionHandle)
+        case .personSegmentation:
+            if #available(iOS 15.0, *) {
+                baseRequest = VNGeneratePersonSegmentationRequest(completionHandler: completionHandle)
+            } else {
+                // Fallback on earlier versions
+            }
         }
         
         //6. 在global线程发送请求，防止阻塞主线程
@@ -930,6 +937,74 @@ extension MCFastVision {
     }
 }
 
+//MARK: 人像分割 / 人物蒙版生成
+extension MCFastVision {
+    
+    @available(iOS 15.0, *)
+    public class func detectPersonSegmentation(
+        imageView: UIImageView,
+        successBlock: ((_ results: [MCVisionPersonSegmentationResult]) -> Void)? = nil,
+        failedBlock: ((_ err: String) -> Void)? = nil
+    ) {
+        guard let image = imageView.image, let cgImage = image.cgImage else {
+            failedBlock?("未获取到待识别的图片")
+            return
+        }
+        
+        let orientation = CGImagePropertyOrientation(rawValue: UInt32(image.imageOrientation.rawValue)) ?? .up
+        
+        // 创建请求
+        let request = VNGeneratePersonSegmentationRequest { request, error in
+            if let error = error {
+                failedBlock?("人像分割失败：\(error.localizedDescription)")
+                return
+            }
+            
+            guard let observations = request.results as? [VNPixelBufferObservation], !observations.isEmpty else {
+                successBlock?([])  // 没检测到人
+                return
+            }
+            
+            var results: [MCVisionPersonSegmentationResult] = []
+            
+            for obs: VNPixelBufferObservation in observations {
+                // 人像分割的 confidence 通常高，可选过滤
+                if obs.confidence < Float(MCFastVision.shared.mcVisionDetectConfig.minConfidence) {
+                    continue
+                }
+                
+                results.append(MCVisionPersonSegmentationResult(
+                    observation: obs,
+                    confidence: obs.confidence
+                ))
+            }
+            
+            DispatchQueue.main.async {
+                let config = MCFastVision.shared.mcVisionDetectConfig.drawConfig
+                if config.showConfidence {
+                    DispatchQueue.main.async {
+                        MCFastVision.drawPersonSegmentationMask(imageView: imageView, results: results)
+                    }
+                }
+                successBlock?(results)
+            }
+        }
+        
+        // 可配置质量
+        request.qualityLevel = .accurate  // .fast / .accurate / .balanced，根据 config
+        request.outputPixelFormat = kCVPixelFormatType_OneComponent8  // 灰度蒙版，常用
+        
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
+        
+        DispatchQueue.global().async {
+            do {
+                try handler.perform([request])
+            } catch {
+                failedBlock?("人像分割执行失败：\(error.localizedDescription)")
+            }
+        }
+    }
+}
 //MARK: 绘制关键点、置信度和目标方框
 extension MCFastVision {
     /// 绘制脸部关键点
@@ -1219,6 +1294,75 @@ extension MCFastVision {
             let boundingBox: CGRect = visionResult.rect
             drawBoxAndConfInImageView(imageView: imageView, boxLineOverlayLayer: boxLineOverlayLayer, label: visionResult.label + " (\(String(format: "%.2f", conf)))", boundingBox: boundingBox)
         }
+    }
+    class func drawPersonSegmentationMask(imageView: UIImageView, results: [MCVisionPersonSegmentationResult]) {
+        let config = MCFastVision.shared.mcVisionDetectConfig.drawConfig
+        guard !results.isEmpty,
+              let firstResult = results.first,
+              let originalImage = imageView.image,
+              let originalCIImage = CIImage(image: originalImage) else {
+            return
+        }
+        
+        let maskPixelBuffer = firstResult.pixelBuffer
+        
+        // Convert mask to CIImage and scale to match original image size (Vision often returns smaller mask)
+        var maskCIImage = CIImage(cvPixelBuffer: maskPixelBuffer)
+        
+        let scaleX = originalCIImage.extent.width / maskCIImage.extent.width
+        let scaleY = originalCIImage.extent.height / maskCIImage.extent.height
+        maskCIImage = maskCIImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
+        
+        // 1. Create constant color (semi-transparent red overlay for person area)
+        guard let colorFilter = CIFilter(name: "CIConstantColorGenerator") else { return }
+        // 从 config 读取颜色，并转换为 CIColor
+        let maskColor = config.personSegmentationMaskColor
+        var ciColorComponents: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) = (0, 0, 0, 0)
+        maskColor.getRed(&ciColorComponents.r, green: &ciColorComponents.g, blue: &ciColorComponents.b, alpha: &ciColorComponents.a)
+        colorFilter.setValue(CIColor(red: ciColorComponents.r,
+                                         green: ciColorComponents.g,
+                                         blue: ciColorComponents.b,
+                                         alpha: ciColorComponents.a),
+                                 forKey: kCIInputColorKey)
+        
+        // 2. Blend color using the mask (color where mask=1, transparent where mask=0)
+        guard let blendFilter = CIFilter(name: "CIBlendWithMask") else { return }
+        blendFilter.setValue(colorFilter.outputImage, forKey: kCIInputImageKey)              // 输入图像 = 颜色
+        blendFilter.setValue(maskCIImage, forKey: kCIInputMaskImageKey)                     // 蒙版
+        blendFilter.setValue(originalCIImage, forKey: kCIInputBackgroundImageKey)           // 背景 = 原图（这样人物区域叠加遮罩）
+        
+        guard let outputCIImage = blendFilter.outputImage else { return }
+        
+        // 3. Render to overlay layer (reuse your existing overlay creation method)
+        let overlayLayer = newBoxLineOverlayLayer(imageView: imageView)
+        
+        // 计算图片在 imageView 中的原始显示区域（考虑 contentMode，如 scaleAspectFit）
+        var imageRectInView = AVMakeRect(aspectRatio: originalImage.size, insideRect: imageView.bounds)
+        
+        // 获取配置中的 padding
+        let padding = MCFastVision.shared.mcVisionDetectConfig.drawConfig.personSegmentationMaskPadding
+        
+        // 应用 padding 偏移（注意：insetBy 会根据正负值向内/外调整）
+        imageRectInView = imageRectInView.inset(by: padding)
+        
+        // 防止 rect 变成负尺寸（极端 padding 情况下）
+        if imageRectInView.width <= 0 || imageRectInView.height <= 0 {
+            //警告：padding 导致遮罩区域无效，已恢复为原始 rect"
+            imageRectInView = AVMakeRect(aspectRatio: originalImage.size, insideRect: imageView.bounds)
+        }
+        let imageLayer = CALayer()
+        // 然后 imageLayer.frame = imageRectInView
+        imageLayer.frame = imageRectInView
+        
+        // Convert CIImage → CGImage for CALayer (use CIContext for rendering)
+        let context = CIContext(options: nil)
+        if let cgOutput = context.createCGImage(outputCIImage, from: outputCIImage.extent) {
+            imageLayer.contents = cgOutput
+        }
+        
+        imageLayer.opacity = config.personSegmentationMaskOpacity  // 整体透明度微调
+        
+        overlayLayer.addSublayer(imageLayer)
     }
     
     // MARK: - Draw box and confidence

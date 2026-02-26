@@ -13,4 +13,5 @@ public enum MCFastVisionDetectType {
     case faceRectangles //人脸框
     case faceLandmarks  //检测图像中的所有面部，然后再分析面部特征
     case animals  //检测动物
+    case personSegmentation  //人像分割 / 人物蒙版生成
 }

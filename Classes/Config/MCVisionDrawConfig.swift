@@ -40,4 +40,16 @@ struct MCVisionDrawConfig {
     var showFaceBox: Bool = true
     /// 是否绘制置信度
     var showConfidence: Bool = true
+    
+    /// 人像分割 / 人物蒙版生成
+    /// 遮罩透明度
+    var personSegmentationMaskOpacity: Float = 0.7
+    /// 人像分割遮罩相对于图片显示区域的内/外边距（支持正负值）
+    /// - 正值：向内收缩（缩小遮罩区域）
+    /// - 负值：向外扩展（放大遮罩区域）
+    /// - 单位：像素（基于 imageView 的坐标系）
+    var personSegmentationMaskPadding: UIEdgeInsets = .zero  // 默认无偏移
+    /// 人像分割遮罩颜色（包括 alpha 通道，决定了叠加时的着色效果）
+    /// - 默认绿色半透明，可改为绿色、蓝色、黄色等
+    var personSegmentationMaskColor: UIColor = UIColor.green.withAlphaComponent(0.66)
 }
