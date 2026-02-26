@@ -15,7 +15,7 @@
 
 ---
 
-## 🌍 Language / 语言选择
+# 🌍 Language / 语言选择
 <!-- 语言切换（点击会滚动到对应语言区） -->
 [中文](#chinese) | [English](#english)
 
@@ -118,7 +118,7 @@ MCFastVision is a lightweight, general-purpose visual recognition toolkit built 
 - **Device Compatibility**: Supports all iPhone/iPad devices (A12 Bionic and above perform best, especially for real-time video streaming + portrait segmentation)
 - **Dependencies**: No third-party library dependencies. Pure Apple native framework, no additional installation packages required.
 
-### Installation (CocoaPods)
+## Installation (CocoaPods)
 
 Add to your `Podfile`:
 
@@ -134,7 +134,7 @@ pod install
 
 ---
 
-## TODO / Future Plans
+# TODO / Future Plans
 
 以下是项目未来的优化方向（欢迎 PR 或 Issue 讨论）：
 
@@ -151,7 +151,7 @@ pod install
 
 欢迎贡献代码、测试用例或想法！
 
-### 许可证
+# 许可证
 
 本项目基于 [MIT License](https://github.com/Json031/MCFastVision/blob/main/LICENSE) 开源协议。
 
