@@ -50,6 +50,18 @@
 ### 人像分割
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/a661ef35-b92b-48bb-b800-f92c1f609314" style="border: 2px solid blue;" />
 
+## 环境要求
+
+- **iOS Version**:
+  - iOS 15.0+（完整支持所有功能，包括人像分割）
+  - iOS 13.0+（支持 OCR、条码、人脸、矩形、动物识别等核心功能）
+
+- **Device Compatibility**:
+  - 支持所有 iPhone/iPad（A12 Bionic 及以上芯片性能最佳，尤其是实时视频流 + 人像分割）
+
+- **Dependencies**: 无任何第三方库依赖  
+  纯 Apple 原生框架，无需额外安装包。
+  
 ## 安装（CocoaPods）
 
 通过 CocoaPods 安装该库：
@@ -99,6 +111,13 @@ MCFastVision is a lightweight, general-purpose visual recognition toolkit built 
 ### Portrait Segmentation
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/a661ef35-b92b-48bb-b800-f92c1f609314" style="border: 2px solid blue;" />
 
+## Environmental requirements
+- **iOS Version**: 
+    - iOS 15.0+ (full support for all features, including portrait segmentation) 
+    - iOS 13.0+ (support for core features such as OCR, barcode, face, rectangle, animal recognition, etc.)
+- **Device Compatibility**: Supports all iPhone/iPad devices (A12 Bionic and above perform best, especially for real-time video streaming + portrait segmentation)
+- **Dependencies**: No third-party library dependencies. Pure Apple native framework, no additional installation packages required.
+
 ### Installation (CocoaPods)
 
 Add to your `Podfile`:
@@ -114,6 +133,23 @@ pod install
 ```
 
 ---
+
+## TODO / Future Plans
+
+以下是项目未来的优化方向（欢迎 PR 或 Issue 讨论）：
+
+- **实时视频流支持**  
+  添加针对 CVPixelBuffer 的检测变体（如 `detect(in pixelBuffer: CVPixelBuffer, completion: ...)`），结合 `VNSequenceRequestHandler` 实现相机预览或视频流的连续识别。目标：支持实时人脸/动物/分割等功能，适用于 AR、直播滤镜、监控等场景。
+
+- **自定义 Core ML 支持**  
+  引入 `VNCoreMLRequest` 入口，允许用户传入自定义 .mlmodel 文件（e.g. YOLO、MobileNet、自定义物体检测模型）。这将大幅提升扩展性，支持更多类别（如汽车、水杯、食物、植物等）的物体识别。
+
+其他潜在方向：
+- 支持人体姿态 / 手势检测（VNDetectHumanBodyPoseRequest / VNDetectHumanHandPoseRequest）
+- 视频处理支持（批量帧处理或导出带标注的视频）
+- Swift Package Manager (SPM) 集成
+
+欢迎贡献代码、测试用例或想法！
 
 ### 许可证
 

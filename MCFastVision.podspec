@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "MCFastVision"
-  spec.version      = "1.2.1"
+  spec.version      = "1.2.2"
   spec.summary      = "A lightweight iOS Vision toolkit that supports OCR, barcode/QR code, face detection & keypoints, rectangle detection, animal recognition (cats and dogs), portrait segmentation (person mask), provides unified configuration and result visualization (boxes, keypoints, mask overlay), and is quickly integrated for scanning, recognition, detection, background blurring, image clipping, and annotation scenarios."
 
   # This description is used to generate tags and improve search results.

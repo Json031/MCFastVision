@@ -13,7 +13,8 @@ class MCVisionViewController: UIViewController {
     private var activityIndicatorView: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     private var visionDetectType: MCFastVisionDetectType = .faceLandmarks// 视觉检测识别类型默认人脸识别
     
-    private let types: [MCVisionDetectTypesItem] = [MCVisionDetectTypesItem(type: .text, typeName: "Text detect"), MCVisionDetectTypesItem(type: .code, typeName: "Code detect"), MCVisionDetectTypesItem(type: .rectangle, typeName: "Rectangle detect"), MCVisionDetectTypesItem(type: .faceRectangles, typeName: "Face rectangles detect"), MCVisionDetectTypesItem(type: .faceLandmarks, typeName: "Face landmarks detect"), MCVisionDetectTypesItem(type: .animals, typeName: "Animals detect")]
+    private var types: [MCVisionDetectTypesItem] = [MCVisionDetectTypesItem(type: .text, typeName: "Text detect"), MCVisionDetectTypesItem(type: .code, typeName: "Code detect"), MCVisionDetectTypesItem(type: .rectangle, typeName: "Rectangle detect"), MCVisionDetectTypesItem(type: .faceRectangles, typeName: "Face rectangles detect"), MCVisionDetectTypesItem(type: .faceLandmarks, typeName: "Face landmarks detect"), MCVisionDetectTypesItem(type: .animals, typeName: "Animals detect")]
+    
     private let typesItemCellID: String = "typesItemCellID"
     
     override func viewDidLoad() {
@@ -21,6 +22,12 @@ class MCVisionViewController: UIViewController {
         self.view.backgroundColor = .white
         
         configSubView()
+        
+        if #available(iOS 15.0, *) {
+            types.append(MCVisionDetectTypesItem(type: .personSegmentation, typeName: "Person segmentation"))
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     // MARK: - private method
@@ -120,6 +127,12 @@ class MCVisionViewController: UIViewController {
                 self.detectFaceLandmarks()
             case .animals:
                 self.detectAnimals()
+            case .personSegmentation:
+                if #available(iOS 15.0, *) {
+                    self.detectPersonSegmentation()
+                } else {
+                    // Fallback on earlier versions
+                }
             }
         })
     }
@@ -328,6 +341,37 @@ class MCVisionViewController: UIViewController {
                 }
             )
         })
+    }
+    @available(iOS 15.0, *)
+    private func detectPersonSegmentation() {
+        DispatchQueue.main.async {
+            self.activityIndicatorView.startAnimating()
+            
+            MCFastVision.detectPersonSegmentation(
+                imageView: self.imageView,
+                successBlock: { results in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.activityIndicatorView.stopAnimating()
+                        
+                        if results.isEmpty {
+                            self.tipTextView.text = "无人像分割结果"
+                            return
+                        }
+                        
+                        let count = results.count  // 通常 1（单蒙版）
+                        let conf = results.first.map { String(format: "%.2f", $0.confidence) } ?? "N/A"
+                        
+                        self.tipTextView.text = "人像分割成功\n检测到 \(count) 个主体\n平均置信度: \(conf)\n（已应用半透明蒙版可视化）"
+                    }
+                },
+                failedBlock: { err in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.activityIndicatorView.stopAnimating()
+                        self.tipTextView.text = err
+                    }
+                }
+            )
+        }
     }
     private func detectRectangles() {
         DispatchQueue.main.async(execute: {
