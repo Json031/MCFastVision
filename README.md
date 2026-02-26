@@ -22,7 +22,7 @@
 # 中文
 <a name="chinese"></a>
 
-[MCFastVision](https://github.com/Json031/MCFastVision) 是一个基于 iOS Vision 框架的轻量级通用视觉识别工具库，封装了文字识别（OCR）、条形码/二维码识别、人脸检测、人脸关键点检测、矩形检测、动物识别（猫与狗）等能力，并提供统一的配置入口与识别结果绘制能力，支持快速集成到业务项目中，用于扫描、识别、检测与可视化标注等场景。
+[MCFastVision](https://github.com/Json031/MCFastVision) 是一个基于 iOS Vision 框架的轻量级通用视觉识别工具库，封装了文字识别（OCR）、条形码/二维码识别、人脸检测、人脸关键点检测、矩形检测、动物识别（猫与狗）、人像分割（人物蒙版生成）等能力，并提供统一的配置入口与识别结果绘制能力（支持框选、关键点、蒙版叠加等可视化），支持快速集成到业务项目中，用于扫描、识别、检测、背景虚化、抠图与可视化标注等场景。
 
 ## 项目Example示例
 ### 人脸及关键点识别
@@ -47,6 +47,9 @@
 ### 人脸框快速检测
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/81579d8f-d6c9-4696-9628-2a1dc9fc8202" style="border: 2px solid blue;" />
 
+### 人像分割
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/a661ef35-b92b-48bb-b800-f92c1f609314" style="border: 2px solid blue;" />
+
 ## 安装（CocoaPods）
 
 通过 CocoaPods 安装该库：
@@ -68,7 +71,7 @@ pod install
 # English
 <a name="english"></a>
 
-MCFastVision is a lightweight, general-purpose visual recognition toolkit based on Apple's iOS Vision framework. It encapsulates capabilities such as text recognition (OCR), barcode/QR code scanning, face detection, face landmark detection, rectangle detection, and animal recognition (cats and dogs). The library provides a unified configuration entry point and built-in drawing support for recognition results, enabling rapid integration into business projects for scenarios like scanning, identification, detection, and visual annotation.
+MCFastVision is a lightweight, general-purpose visual recognition toolkit built on the iOS Vision framework. It encapsulates capabilities such as text recognition (OCR), barcode/QR code recognition, face detection, facial keypoint detection, rectangle detection, animal recognition (cats and dogs), and portrait segmentation (person mask generation). It provides a unified configuration interface and the ability to visualize recognition results (supporting visualizations like box selection, keypoint overlay, and mask overlay). It supports rapid integration into business projects for scenarios such as scanning, recognition, detection, background blurring, image clipping, and visual annotation.
 
 ## Project Example
 ### Face landmarks recognition
@@ -92,6 +95,9 @@ MCFastVision is a lightweight, general-purpose visual recognition toolkit based 
 
 ### Fast detection of face rectangles
 <img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/81579d8f-d6c9-4696-9628-2a1dc9fc8202" style="border: 2px solid blue;" />
+
+### Portrait Segmentation
+<img width="220" height="440" alt="screenshot-1" src="https://github.com/user-attachments/assets/a661ef35-b92b-48bb-b800-f92c1f609314" style="border: 2px solid blue;" />
 
 ### Installation (CocoaPods)
 
