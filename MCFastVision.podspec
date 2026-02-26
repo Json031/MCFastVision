@@ -16,8 +16,8 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "MCFastVision"
-  spec.version      = "1.2.0"
-  spec.summary      = "A lightweight and versatile visual recognition toolkit based on the iOS Vision framework encapsulates capabilities such as text recognition (OCR), barcode/QR code recognition, face detection, facial keypoint detection, rectangle detection, animal recognition (cats and dogs), and portrait segmentation (person mask generation). It provides a unified configuration entry and recognition result drawing capability (supporting visualizations such as box selection, keypoint, and mask overlay), enabling rapid integration into business projects for scenarios such as scanning, recognition, detection, background blurring, image clipping, and visual annotation."
+  spec.version      = "1.2.1"
+  spec.summary      = "A lightweight iOS Vision toolkit that supports OCR, barcode/QR code, face detection & keypoints, rectangle detection, animal recognition (cats and dogs), portrait segmentation (person mask), provides unified configuration and result visualization (boxes, keypoints, mask overlay), and is quickly integrated for scanning, recognition, detection, background blurring, image clipping, and annotation scenarios."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
