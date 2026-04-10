@@ -75,6 +75,28 @@ pod 'MCFastVision'
 pod install
 ```
 
+---
+
+# 待办事项 / 未来计划
+
+以下是项目未来的优化方向（欢迎 PR 或 Issue 讨论）：
+
+- **实时视频流支持**  
+  添加针对 CVPixelBuffer 的检测变体（如 `detect(in pixelBuffer: CVPixelBuffer, completion: ...)`），结合 `VNSequenceRequestHandler` 实现相机预览或视频流的连续识别。目标：支持实时人脸/动物/分割等功能，适用于 AR、直播滤镜、监控等场景。
+
+- **自定义 Core ML 支持**  
+  引入 `VNCoreMLRequest` 入口，允许用户传入自定义 .mlmodel 文件（e.g. YOLO、MobileNet、自定义物体检测模型）。这将大幅提升扩展性，支持更多类别（如汽车、水杯、食物、植物等）的物体识别。
+
+其他潜在方向：
+- 支持人体姿态 / 手势检测（VNDetectHumanBodyPoseRequest / VNDetectHumanHandPoseRequest）
+- 视频处理支持（批量帧处理或导出带标注的视频）
+- Swift Package Manager (SPM) 集成
+
+欢迎贡献代码、测试用例或想法！
+
+# 许可证
+
+本项目基于 [MIT License](https://github.com/Json031/MCFastVision/blob/main/LICENSE) 开源协议。
 
 ---
 
@@ -132,25 +154,22 @@ pod install
 
 # TODO / Future Plans
 
-以下是项目未来的优化方向（欢迎 PR 或 Issue 讨论）：
+The following are potential optimizations and future directions for the project. Contributions via PR or discussions in Issues are welcome!
 
-- **实时视频流支持**  
-  添加针对 CVPixelBuffer 的检测变体（如 `detect(in pixelBuffer: CVPixelBuffer, completion: ...)`），结合 `VNSequenceRequestHandler` 实现相机预览或视频流的连续识别。目标：支持实时人脸/动物/分割等功能，适用于 AR、直播滤镜、监控等场景。
+- **Real-Time Video Stream Support**
+  Add a detection variant for `CVPixelBuffer` (e.g., `detect(in pixelBuffer: CVPixelBuffer, completion: ...)`), combined with `VNSequenceRequestHandler` to enable continuous recognition in camera previews or video streams. Goal: support real-time face/animal/segmentation tasks for AR scenarios, live broadcast filters, surveillance, and more.
 
-- **自定义 Core ML 支持**  
-  引入 `VNCoreMLRequest` 入口，允许用户传入自定义 .mlmodel 文件（e.g. YOLO、MobileNet、自定义物体检测模型）。这将大幅提升扩展性，支持更多类别（如汽车、水杯、食物、植物等）的物体识别。
+- **Custom Core ML Model Support**
+  Introduce a `VNCoreMLRequest` interface to allow users to integrate custom `.mlmodel` files (e.g., YOLO, MobileNet, custom object detection models). This will greatly improve extensibility and support detection for more categories such as cars, cups, food, plants, etc.
 
-其他潜在方向：
-- 支持人体姿态 / 手势检测（VNDetectHumanBodyPoseRequest / VNDetectHumanHandPoseRequest）
-- 视频处理支持（批量帧处理或导出带标注的视频）
-- Swift Package Manager (SPM) 集成
+Other potential features:
+- Human pose / hand gesture detection (`VNDetectHumanBodyPoseRequest` / `VNDetectHumanHandPoseRequest`)
+- Video processing support (batch frame processing or annotated video export)
+- Swift Package Manager (SPM) integration
 
-欢迎贡献代码、测试用例或想法！
+Contributions in code, test cases, or ideas are highly appreciated.
 
-# 许可证
-
-本项目基于 [MIT License](https://github.com/Json031/MCFastVision/blob/main/LICENSE) 开源协议。
-
----
+# License
+This project is open source under the [MIT License](https://github.com/Json031/MCFastVision/blob/main/LICENSE).
 
 **[⬆ Back to Top / 返回顶部](#top)**
